@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<folders>
+  <folder id="123" private="0" archived="0">Shopping</folder>
+  <folder id="456" private="0" archived="0">Home Repairs</folder>
+  <folder id="789" private="0" archived="0">Vacation Planning</folder>
+  <folder id="234" private="0" archived="0">Chores</folder>
+  <folder id="567" private="1" archived="0">Work</folder>
+</folders>
