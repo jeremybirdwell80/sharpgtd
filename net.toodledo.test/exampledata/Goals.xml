@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<goals>
+  <goal id="123" level="0" contributes="0">Get a Raise</goal>
+  <goal id="456" level="0" contributes="0">Lose Weight</goal>
+  <goal id="789" level="1" contributes="456">Exercise regularly</goal>
+</goals>

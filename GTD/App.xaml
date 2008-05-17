@@ -1,0 +1,13 @@
+﻿<Application x:Class="GTD.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         <ResourceDictionary Source="Styles.xaml" >
+         	<ResourceDictionary.MergedDictionaries>
+         		<ResourceDictionary Source="Assets.xaml"/>
+         		<ResourceDictionary Source="Styles.xaml"/>
+         	</ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
+    </Application.Resources>
+</Application>
