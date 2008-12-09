@@ -6,12 +6,34 @@ using System.Xml.Linq;
 
 namespace Net.Toodledo
 {
+    /// <summary>
+    /// This class handles all the interactions with the toodledo web services that have to do with tasks.
+    /// </summary>
     public class TaskDataService
     {
         private string _key;
+        /// <summary>
+        /// Need a key from the session object before this will work.
+        /// </summary>
+        /// <param name="key"></param>
         public TaskDataService(string key)
         {
+            if (key==null){
+                throw new ArgumentNullException("Key cannot be null.");
+            }
             _key = key;
+        }
+       
+        /// <summary>
+        /// Returns all tasks
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Task> GetTasks()
+        {
+            IEnumerable<Task> tasks;
+            //XDocument loaded = XDocument.Load(Session.TOODLEDO_URL + "?method=getTasks;key=" + _key);
+            tasks=LoadTasks(Session.TOODLEDO_URL + "?method=getTasks;key=" + _key);
+            return tasks;     
         }
 
         public IEnumerable<Task> GetTasksForFolder(int folderId)
@@ -21,48 +43,35 @@ namespace Net.Toodledo
 
         public IEnumerable<Task> GetTasksForContext(int contextId)
         {
-             return LoadTasks(string.Format("{0}?method=getTasks;key={1};Context={2}", Session.TOODLEDO_URL, _key, contextId));
+            return LoadTasks(string.Format("{0}?method=getTasks;key={1};Context={2}", Session.TOODLEDO_URL, _key, contextId));
         }
 
-        public XDocument GetTaskDocument(string url)
-        {
-            return XDocument.Load(url);
-        }
-
+        /// <summary>
+        /// Returns all the tasks based on the url string that is passed.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public IEnumerable<Task> LoadTasks(string url)
         {
             return LoadTasks(GetTaskDocument(url));
         }
-        public IEnumerable<Task> GetTasks()
-        {
-            IEnumerable<Task> tasks;
-            //XDocument loaded = XDocument.Load(Session.TOODLEDO_URL + "?method=getTasks;key=" + _key);
-            tasks=LoadTasks(Session.TOODLEDO_URL + "?method=getTasks;key=" + _key);
-            // Query the data and write out a subset of contacts
-            //tasks = from c in loaded.Descendants("task")
-            //        select new Task
-            //        {
-            //            ID = (int)c.Element("id"),
-            //            ParentID=(int?) c.Element("parent")?? 0,
-            //            Children = (int)c.Element("children"),
-            //            Title = (string)c.Element("title"),
-            //            Tag = (string)c.Element("tag"),
-            //            FolderID = (int)c.Element("folder"),
-            //            Repeat = (int)c.Element("repeat"),
-            //            Length = (int)c.Element("length"),
-            //            Priority = (int)c.Element("priority"),
-            //            Note = (string)c.Element("note"),
-            //            Timer = (int)c.Element("timer"),
-            //            Added = DateTime.Parse(c.Element("added").Value),
-            //            Modified = DateTime.Parse(c.Element("modified").Value),
-            //            Completed = parseTime(c.Element("completed").Value),
-            //            Due = parseTime(c.Element("duedate") + " " + c.Element("duetime")),
-            //            ContextID = (int)c.Element("context").Attribute("id"),
-            //            GoalID = (int)c.Element("goal").Attribute("id"),
-            //        };                
-                return tasks;     
-        }
 
+
+        /// <summary>
+        /// Returns the xml document representing the tasks that match whatever query was sent via the url string.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public XDocument GetTaskDocument(string url)
+        {
+            return XDocument.Load(url);
+        }        
+
+        /// <summary>
+        /// loads tasks bases on the XDocument that is passed in.
+        /// </summary>
+        /// <param name="taskDoc"></param>
+        /// <returns></returns>
         public IEnumerable<Task>  LoadTasks(XDocument taskDoc)  
         {
             IEnumerable<Task> tasks;
@@ -70,7 +79,7 @@ namespace Net.Toodledo
                 select new Task
                 {
                     ID = (int)c.Element("id"),
-                    ParentID = (int?)c.Element("parent") ?? 0,
+                    ParentID = (int?)c.Element("parent") ?? 0,//If parentid is not there simply set it to 0
                     Children = (int)c.Element("children"),
                     Title = (string)c.Element("title"),
                     Tag = (string)c.Element("tag"),
