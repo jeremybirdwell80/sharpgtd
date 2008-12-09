@@ -120,11 +120,20 @@ namespace Net.Toodledo
             return newId;
         }
 
+        public int AddTask(string url)
+        {
+            XDocument loaded = XDocument.Load(url);
+            int newId;
+            newId = (int)loaded.Element("added");
+            return newId;
+        }
+
         public int AddTask(string title, int folder, int context)
         {
             return AddTask(title, null,folder, context, 0, 0, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, 0, null, 0, 0, 0, false, null);
         }
                
+        //These all need to be encoded to make them safe to put into a url
         public int AddTask(string title, string tag, int folder, int context, int goal, int parent, DateTime dueDate,
              DateTime startDate, DateTime dueTime, int repeat, string repeatAdvanced, int status, int length,
             int priority, Boolean star, string note)
@@ -140,7 +149,14 @@ namespace Net.Toodledo
             if (goal != 0) parameterList.Add("goal", goal.ToString());
             if (parent != 0) parameterList.Add("parent", parent.ToString());
             if (dueDate != DateTime.MinValue) parameterList.Add("duedate", dueDate.ToString());
-            if (startDate != DateTime.MinValue) parameterList.Add("startdate", startDate.ToString());          
+            if (startDate != DateTime.MinValue) parameterList.Add("startdate", startDate.ToString()); 
+            if (repeat != 0) parameterList.Add("repeat",repeat.ToString());
+            if (repeatAdvanced != null) parameterList.Add("repeatadvanced", repeatAdvanced);
+            if (status != 0) parameterList.Add("status", status.ToString());
+            if (length != 0) parameterList.Add("length", length.ToString());
+            if (priority != 0) parameterList.Add("priority", priority.ToString());
+            if (note != null) parameterList.Add("note", note);
+
             int newId;
             newId = AddTask(title, parameterList);
             return newId;
