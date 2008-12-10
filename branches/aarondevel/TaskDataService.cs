@@ -99,20 +99,25 @@ namespace Net.Toodledo
             return tasks;     
 
         }
-        public int AddTask(string title)
-        {
-            return AddTask(title, null, 0, 0, 0, 0, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, 0, null, 0, 0, 0, false, null);
-        }
+        //public int AddTask(string title)
+        //{
+        //    return AddTask(title, null, 0, 0, 0, 0, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, 0, null, 0, 0, 0, false, null);
+        //}
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="parameterDictionary"></param>
+        /// <returns></returns>
         public int AddTask(string title, IEnumerable<KeyValuePair<string, string>> parameterDictionary)
         {
-       
-            string apiCall = string.Format("?method=addTask;key={0};title={1};", _key,title);
+
+            string apiCall = string.Format("?method=addTask;key={0};title={1};", _key, title);
             StringBuilder sb = new StringBuilder(apiCall);
             foreach (var kvp in parameterDictionary)
             {
-                sb.AppendFormat("{0}={1};",kvp.Key,kvp.Value);
+                sb.AppendFormat("{0}={1};", kvp.Key, kvp.Value);
             }
             XDocument loaded = XDocument.Load(Session.TOODLEDO_URL + sb.ToString());
             int newId;
@@ -133,15 +138,14 @@ namespace Net.Toodledo
             return AddTask(title, null,folder, context, 0, 0, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, 0, null, 0, 0, 0, false, null);
         }
                
-        //These all need to be encoded to make them safe to put into a url
+        //These all need to be encoded to make them safe to put into a url, perhaps with System.Web.HTTPServerUtility.URLEncode
         public int AddTask(string title, string tag, int folder, int context, int goal, int parent, DateTime dueDate,
              DateTime startDate, DateTime dueTime, int repeat, string repeatAdvanced, int status, int length,
             int priority, Boolean star, string note)
         {
             var parameterList = new Dictionary<string, string>();
             if (title == null) throw new ArgumentNullException("Title cannot be null.");
-
-
+            
             if (tag != null) parameterList.Add("tag", tag);
             if (note != null && note != string.Empty) parameterList.Add("note", note);
             if (folder != 0) parameterList.Add("folder", folder.ToString());
@@ -161,6 +165,7 @@ namespace Net.Toodledo
             newId = AddTask(title, parameterList);
             return newId;
         }
+
         DateTime parseTime(string date)
         {
             DateTime ret;
