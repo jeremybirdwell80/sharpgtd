@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<contacts>
+  <contact contactId="2">
+    <firstName>Barney</firstName>
+    <lastName>Gottshall</lastName>
+  </contact>
+  <contact contactId="3">
+    <firstName>Armando</firstName>
+    <lastName>Valdes</lastName>
+  </contact>
+  <contact contactId="4">
+    <firstName>Adam</firstName>
+    <lastName>Gauwain</lastName>
+  </contact>
+</contacts>
