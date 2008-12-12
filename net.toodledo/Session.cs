@@ -50,13 +50,13 @@ namespace Net.Toodledo
 
         string XGetToken()
         {
-            XDocument loaded = XDocument.Load(@"http://www.toodledo.com/api.php?method=getToken;userid="+UserID);
+            XDocument loaded = XDocument.Load(TOODLEDO_URL+"?method=getToken;userid="+UserID);
             return loaded.Element("token").Value;
             
         }
         string XGetUserID()
         {
-            XDocument loaded = XDocument.Load(@"http://www.toodledo.com/api.php?method=getUserid;email="+Email+";pass=" + Password);
+            XDocument loaded = XDocument.Load(TOODLEDO_URL+"?method=getUserid;email="+Email+";pass=" + Password);
             return loaded.Element("userid").Value;
         }
 
@@ -83,7 +83,36 @@ namespace Net.Toodledo
 
             }
         }
+        public static string TOODLEDO_ADDRESS = @"www.toodledo.com/api.php";
+        private static bool _useSSL = true;
 
+
+        public static bool USE_SSL
+        {
+            get
+            {
+                return _useSSL;
+            }
+            set
+            {
+                _useSSL = value;
+            }
+        }
+        
+        public static string TOODLEDO_URL
+        {
+            get
+            {
+                if (USE_SSL)
+                {
+                    return string.Format(@"https://{0}", TOODLEDO_ADDRESS);
+                }
+                else
+                {
+                    return string.Format(@"http://{0}", TOODLEDO_ADDRESS);
+                }
+            }
+        }
         IEnumerable<Task> tasks;
         public IEnumerable<Task> Tasks
         {
@@ -91,33 +120,8 @@ namespace Net.Toodledo
             {
                 if (tasks == null)
                 {
-                    XDocument loaded = XDocument.Load(@"http://www.toodledo.com/api.php?method=getTasks;key=" + Key);
-                    // Query the data and write out a subset of contacts
-                    tasks = from c in loaded.Descendants("task")
-                               select new Task
-                               {
-                                   ID = (int)c.Element("id"),
-                                   ParentID= (int)c.Element("parent"),
-                                   Children= (int)c.Element("children"),
-                                   Title = (string)c.Element("title"),
-                                   Tag = (string)c.Element("tag"),
-                                   FolderID = (int)c.Element("folder"),
-                                   Repeat = (int)c.Element("repeat"),
-                                   Length = (int)c.Element("length"),
-                                   Priority = (int)c.Element("priority"),
-                                   Note = (string)c.Element("note"),
-                                   Timer = (int)c.Element("timer"),
-                                   Added = DateTime.Parse(c.Element("added").Value),
-                                   Modified = DateTime.Parse(c.Element("modified").Value),
-                                   Completed = parseTime(c.Element("completed").Value),
-                                   Due = parseTime(c.Element("duedate") + " " + c.Element("duetime")),
-                                   ContextID = (int)c.Element("context").Attribute("id"),
-                                   GoalID= (int)c.Element("goal").Attribute("id"),
-                               };
-
-   
-
-
+                    TaskDataService t = new TaskDataService(Key);
+                    tasks = t.GetTasks();    
                 }
                 return tasks;
 
