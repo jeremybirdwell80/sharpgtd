@@ -83,9 +83,11 @@ namespace GTD
 
             if (l.DialogResult.HasValue && l.DialogResult.Value == true)
             {
+                Session.USE_SSL = (Boolean)l.useSSL.IsChecked;
                 session = new Session();
                 session.Email = l.UserName;
                 session.Password = l.Password;
+                session.AppID = "SharpGTD";
                 ShowNotCompleted();
             }
 
