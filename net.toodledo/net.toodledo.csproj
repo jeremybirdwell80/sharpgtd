@@ -52,6 +52,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskDataService.cs" />
+    <Compile Include="ToodledoEnum.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
