@@ -22,6 +22,7 @@ namespace Net.Toodledo
         // key = md5( md5(password)+token+myuserid );
         public static string TOODLEDO_ADDRESS = @"www.toodledo.com/api.php";
         private static bool _useSSL = true;
+        private static string _ToodleDoURL = string.Empty;
 
         string key;
         public string Key
@@ -116,16 +117,22 @@ namespace Net.Toodledo
         
         public static string TOODLEDO_URL
         {
+            //This feels a little cludgy.  ONly want to set the URL once. before it was creating
+            //the url every time we wanted it.  This feels better but not perfect.
             get
             {
-                if (USE_SSL)
-                {
-                    return string.Format(@"https://{0}", TOODLEDO_ADDRESS);
+                if (_ToodleDoURL==string.Empty){
+                    if (USE_SSL)
+                    {
+                        _ToodleDoURL = string.Format(@"https://{0}", TOODLEDO_ADDRESS);
+                    }
+                    else
+                    {
+                        _ToodleDoURL = string.Format(@"http://{0}", TOODLEDO_ADDRESS);
+                    }
                 }
-                else
-                {
-                    return string.Format(@"http://{0}", TOODLEDO_ADDRESS);
-                }
+                return _ToodleDoURL;
+                
             }
         }
         IEnumerable<Task> tasks;
