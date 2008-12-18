@@ -20,21 +20,27 @@ namespace Net.Toodledo
 
         // Make key
         // key = md5( md5(password)+token+myuserid );
+        public static string TOODLEDO_ADDRESS = @"www.toodledo.com/api.php";
+        private static bool _useSSL = true;
 
         string key;
         public string Key
         {
             get { if (key == null) key = md5(md5(Password) + Token + UserID); return key; }
         }
-        string token;
+        string token = string.Empty;
         public string Token { get { if (token == null) token = XGetToken(); return token; } }
-        string userID;
+        string userID = string.Empty;
         public string UserID { get { if (userID == null) userID = XGetUserID(); return userID; } }
 
-        string email;
+        string email = string.Empty;
         public string Email { get { return email; } set { email = value; userID = null; token = null; key = null; } }
-        string password;
+
+        string password = string.Empty;
         public string Password { get { return password; } set { password = value; userID = null; token = null; key = null; } }
+
+        string appId = string.Empty;
+        public string AppID { get { return appId; } set { appId = value; } }
 
         public static string md5(string password)
         {
@@ -50,7 +56,17 @@ namespace Net.Toodledo
 
         string XGetToken()
         {
-            XDocument loaded = XDocument.Load(TOODLEDO_URL+"?method=getToken;userid="+UserID);
+            string URLString = "{0}?method=getToken;userid={1}";
+            string URLAppIdString = "{0}?method=getToken;userid={1};appid={2}";
+            XDocument loaded;
+            if (appId != string.Empty)
+            {
+                loaded = XDocument.Load(string.Format(URLAppIdString, TOODLEDO_URL, UserID, appId));
+            }
+            else
+            {
+                loaded = XDocument.Load(string.Format(URLString, TOODLEDO_URL, UserID));
+            }
             return loaded.Element("token").Value;
             
         }
@@ -83,8 +99,7 @@ namespace Net.Toodledo
 
             }
         }
-        public static string TOODLEDO_ADDRESS = @"www.toodledo.com/api.php";
-        private static bool _useSSL = true;
+       
 
 
         public static bool USE_SSL
