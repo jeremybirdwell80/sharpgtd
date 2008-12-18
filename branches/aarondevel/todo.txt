@@ -1,0 +1,8 @@
+1)API Completion
+  a) Add Folder
+  b) Add Context
+
+2) Create Release
+3) Create Commandline exe
+
+
