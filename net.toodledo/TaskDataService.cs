@@ -32,15 +32,24 @@ namespace Net.Toodledo
         {
             IEnumerable<Task> tasks;
             //XDocument loaded = XDocument.Load(Session.TOODLEDO_URL + "?method=getTasks;key=" + _key);
-            tasks=LoadTasks(Session.TOODLEDO_URL + "?method=getTasks;key=" + _key);
+            tasks = LoadTasks(string.Format("{0}?method=getTasks;key={1}",Session.TOODLEDO_URL,_key));
             return tasks;     
         }
-
+        /// <summary>
+        /// Returns the list of tasks for the specified folder id.
+        /// </summary>
+        /// <param name="folderId"></param>
+        /// <returns></returns>
         public IEnumerable<Task> GetTasksForFolder(int folderId)
         {
             return LoadTasks(string.Format("{0}?method=getTasks;key={1};Folder={2}", Session.TOODLEDO_URL, _key, folderId));
         }
 
+        /// <summary>
+        /// Returns the list of tasks for the specified contextid.
+        /// </summary>
+        /// <param name="contextId"></param>
+        /// <returns></returns>
         public IEnumerable<Task> GetTasksForContext(int contextId)
         {
             return LoadTasks(string.Format("{0}?method=getTasks;key={1};Context={2}", Session.TOODLEDO_URL, _key, contextId));
@@ -68,7 +77,7 @@ namespace Net.Toodledo
         }        
 
         /// <summary>
-        /// loads tasks bases on the XDocument that is passed in.
+        /// Loads tasks based on the XDocument that is passed in.
         /// </summary>
         /// <param name="taskDoc"></param>
         /// <returns></returns>
@@ -105,26 +114,34 @@ namespace Net.Toodledo
         //}
 
         /// <summary>
-        /// 
+        /// Adds a taks to a tasklist.  
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="parameterDictionary"></param>
+        /// <param name="title">Title of the taks.</param>
+        /// <param name="parameterDictionary">List of additional values in the format field=variable.</param>
         /// <returns></returns>
         public int AddTask(string title, IEnumerable<KeyValuePair<string, string>> parameterDictionary)
         {
 
             string apiCall = string.Format("?method=addTask;key={0};title={1};", _key, title);
             StringBuilder sb = new StringBuilder(apiCall);
-            foreach (var kvp in parameterDictionary)
+            //It's ok if nothing is passed in for the parameterdictionary, we just won't looop through them.
+            if (parameterDictionary != null)
             {
-                sb.AppendFormat("{0}={1};", kvp.Key, kvp.Value);
+                foreach (var kvp in parameterDictionary)
+                {
+                    sb.AppendFormat("{0}={1};", kvp.Key, kvp.Value);
+                }
             }
-            XDocument loaded = XDocument.Load(Session.TOODLEDO_URL + sb.ToString());
-            int newId;
-            newId = (int)loaded.Element("added");
-            return newId;
+
+            return AddTask(Session.TOODLEDO_URL + sb.ToString());
         }
 
+        /// <summary>
+        /// Simply cass out to the passed in URL and returns the id of the new task.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        /// <remarks>This is there so that if there is a better way than XDocument.Load() we can use it without changing it everywhere.</remarks>
         public int AddTask(string url)
         {
             XDocument loaded = XDocument.Load(url);
