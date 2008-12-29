@@ -103,5 +103,14 @@ namespace GTD
         {
             DragMove();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Task newTask = new Task();
+            newTask.Height=273;
+            newTask.Width=522;
+            newTask.Show();
+
+        }
     }
 }
