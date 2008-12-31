@@ -14,8 +14,9 @@
 	<Window.Resources>
 		<DataTemplate x:Key="taskTemplate">
 			<Border CornerRadius="5,5,5,5" >
-				<StackPanel>
+				<StackPanel Orientation="Horizontal">
 					<TextBlock Margin="4,4,4,4"  Text="{Binding Path=Title}"/>
+                    <TextBlock Margin="4,4,4,4"  Text="{Binding Path=Priority}"/>
 				</StackPanel>
 				</Border>
 			</DataTemplate>
