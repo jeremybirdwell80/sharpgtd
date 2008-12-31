@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Net.Toodledo;
 
 namespace GTD
 {
@@ -26,7 +27,8 @@ namespace GTD
        
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            TaskDataService taskservice = new TaskDataService(MainWindow.session.Key);
+            taskservice.AddTask(this.txtTitle.Text, null);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
