@@ -23,7 +23,7 @@ namespace GTD
     /// </summary>
     public partial class MainWindow : Window
     {
-        Session session;
+        public static Session session;
         WaitCursor wait;
         BackgroundWorker worker;
 
@@ -109,6 +109,7 @@ namespace GTD
             Task newTask = new Task();
             newTask.Height=273;
             newTask.Width=522;
+            
             newTask.Show();
 
         }
