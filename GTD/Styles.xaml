@@ -21,8 +21,10 @@
 			</LinearGradientBrush>
 			
 			<!-- Color="#FF9F9F9F	#FFFAA182 #FFFD6420"  -->
-			
-			 <Style TargetType="{x:Type Button}">
+            <DataTemplate x:Key="FolderListTemplate">
+                <TextBlock Text="{Binding Path=Title}" />  
+            </DataTemplate>
+    <Style TargetType="{x:Type Button}">
 			 	<Setter Property="Width" Value="NaN"/>
 			 	<Setter Property="MinWidth" Value="0"/>
 			 	<Setter Property="Height" Value="NaN"/>
